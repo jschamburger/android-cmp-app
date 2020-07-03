@@ -1,3 +1,6 @@
+## 4.1.12 (July, 03, 2020)
+* fix app crash when hyperlink is clicked inside the ConsentWebview #190
+
 ## 4.1.11 (June, 06, 2020)
 * fix webview build crash on android Lollipop #169
 
