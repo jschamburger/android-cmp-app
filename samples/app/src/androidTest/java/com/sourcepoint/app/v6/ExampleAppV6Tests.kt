@@ -4,20 +4,14 @@ import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.launchActivity
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.example.uitestutil.wr
-import com.sourcepoint.app.v6.TestUseCase.Companion.checkAllConsentsOff
-import com.sourcepoint.app.v6.TestUseCase.Companion.checkAllConsentsOn
-import com.sourcepoint.app.v6.TestUseCase.Companion.clickOnCcpaReviewConsent
-import com.sourcepoint.app.v6.TestUseCase.Companion.clickOnGdprReviewConsent
 import com.sourcepoint.app.v6.TestUseCase.Companion.tapAcceptAllOnWebView
 import com.sourcepoint.app.v6.TestUseCase.Companion.tapAcceptCcpaOnWebView
 import com.sourcepoint.app.v6.TestUseCase.Companion.tapAcceptOnWebView
-import com.sourcepoint.app.v6.TestUseCase.Companion.tapAllConsent
-import com.sourcepoint.app.v6.TestUseCase.Companion.tapToEnableAllConsent
 import com.sourcepoint.app.v6.TestUseCase.Companion.tapOptionWebView
-import com.sourcepoint.app.v6.TestUseCase.Companion.tapRejectOnWebView
-import com.sourcepoint.app.v6.TestUseCase.Companion.tapSaveAndExitWebView
-import com.sourcepoint.app.v6.TestUseCase.Companion.tapToDisableAllConsent
 import com.sourcepoint.app.v6.core.DataProvider
+import com.sourcepoint.cmplibrary.creation.config
+import com.sourcepoint.cmplibrary.exception.CampaignType
+import com.sourcepoint.cmplibrary.model.exposed.SpConfig
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Test
@@ -29,82 +23,109 @@ import org.koin.dsl.module
 @RunWith(AndroidJUnit4ClassRunner::class)
 class ExampleAppV6Tests {
 
-    lateinit var scenario: ActivityScenario<MainActivityV6Kt>
+    lateinit var scenario: ActivityScenario<MainActivity4test>
 
     @After
     fun cleanup() {
         if (this::scenario.isLateinit) scenario.close()
     }
 
-    private val d = 1000L
+    private val spConfFull = config {
+        accountId = 22
+        propertyName = "mobile.multicampaign.demo"
+        +(CampaignType.CCPA to listOf(("location" to "US")))
+        +(CampaignType.GDPR) //to listOf(("location" to "EU")))
+    }
+
+    private val spConfGdpr = config {
+        accountId = 22
+        propertyName = "mobile.multicampaign.demo"
+        +(CampaignType.GDPR)
+    }
 
     @Test
     fun GIVEN_a_camapignList_ACCEPT_all_legislation() = runBlocking<Unit> {
 
+        loadKoinModules(mockModule(onlyPm = false, spConfig = spConfFull, gdprPmId = "13111"))
+
         scenario = launchActivity()
 
-        wr { tapAcceptOnWebView() }
-        wr { tapAcceptCcpaOnWebView() }
+//        wr { tapAcceptOnWebView() }
+//        wr { tapAcceptCcpaOnWebView() }
     }
 
     @Test
     fun GIVEN_a_camapignList_tap_SETTINGS_all_legislation() = runBlocking<Unit> {
 
-        scenario = launchActivity()
-
-        wr { tapOptionWebView() }
-        wr { tapAcceptAllOnWebView() }
-        wr { tapAcceptCcpaOnWebView() }
-    }
-
-    @Test
-    fun GIVEN_consent_USING_pms() = runBlocking<Unit> {
+        loadKoinModules(mockModule(onlyPm = false, spConfig = spConfFull, gdprPmId = "13111"))
 
         scenario = launchActivity()
 
-        wr { tapAcceptOnWebView() }
-        wr { tapAcceptCcpaOnWebView() }
-        wr { clickOnGdprReviewConsent() }
-        wr { tapAcceptAllOnWebView() }
-        wr { clickOnCcpaReviewConsent() }
-        wr { tapAcceptAllOnWebView() }
+//        wr { tapOptionWebView() }
+//        wr { tapAcceptAllOnWebView() }
+//        wr { tapAcceptCcpaOnWebView() }
     }
 
-    @Test
-    fun SAVE_AND_EXIT_action() = runBlocking<Unit> {
-
-        loadKoinModules(mockModule(uuid = null, url = "", onlyPm = false))
-
-        scenario = launchActivity()
-
-        wr { tapAcceptOnWebView() }
-        wr { tapAcceptCcpaOnWebView() }
-        wr { clickOnGdprReviewConsent() }
-        wr { tapAcceptAllOnWebView() }
-        wr(d = 200) { clickOnGdprReviewConsent() }
-        wr { tapToDisableAllConsent() }
-        wr { tapSaveAndExitWebView() }
-        wr { clickOnGdprReviewConsent() }
-        wr { checkAllConsentsOff() }
-    }
-
-    @Test
-    fun SAVE_AND_EXIT_action_2() = runBlocking<Unit> {
-
-        loadKoinModules(mockModule(uuid = null, url = "", onlyPm = false))
-
-        scenario = launchActivity()
-
-        wr { tapRejectOnWebView() }
-        wr { tapAcceptCcpaOnWebView() }
-        wr { clickOnGdprReviewConsent() }
-        wr { tapRejectOnWebView() }
-        wr{ clickOnGdprReviewConsent() }
-        wr { tapToEnableAllConsent() }
-        wr { tapSaveAndExitWebView() }
-        wr { clickOnGdprReviewConsent() }
-        wr { checkAllConsentsOn() }
-    }
+//    @Test
+//    fun GIVEN_consent_USING_gdpr_pm() = runBlocking<Unit> {
+//
+//        loadKoinModules(mockModule(onlyPm = false, spConfig = spConfFull, gdprPmId = "13111"))
+//
+//        scenario = launchActivity()
+//
+//        wr { tapAcceptOnWebView() }
+//        wr { clickOnGdprReviewConsent() }
+//        wr(backup = { clickOnGdprReviewConsent() }) { tapAcceptAllOnWebView() }
+//    }
+//
+//    @Test
+//    fun GIVEN_a_gdpr_consent_ACCEPT_ALL() = runBlocking<Unit> {
+//
+//        loadKoinModules(mockModule(onlyPm = false, spConfig = spConfGdpr, gdprPmId = "13111"))
+//
+//        scenario = launchActivity()
+//
+//        wr { tapRejectOnWebView() }
+////        wr { clickOnGdprReviewConsent() }
+////        wr(backup = { clickOnGdprReviewConsent() }) { tapAcceptAllOnWebView() }
+////        wr { checkAllConsentsOn() }
+//    }
+//
+//    @Test
+//    fun SAVE_AND_EXIT_action() = runBlocking<Unit> {
+//
+//        loadKoinModules(mockModule(onlyPm = false, spConfig = spConfFull, gdprPmId = "13111"))
+//
+//        scenario = launchActivity()
+//
+//        wr { tapAcceptOnWebView() }
+//        wr { tapAcceptCcpaOnWebView() }
+//        wr { clickOnGdprReviewConsent() }
+//        wr(backup = { clickOnGdprReviewConsent() }) { tapAcceptAllOnWebView() }
+//        wr { clickOnGdprReviewConsent() }
+//        wr { tapToDisableAllConsent() }
+//        wr { tapSaveAndExitWebView() }
+//        wr { clickOnGdprReviewConsent() }
+//        wr { checkAllConsentsOff() }
+//    }
+//
+//    @Test
+//    fun SAVE_AND_EXIT_action_2() = runBlocking<Unit> {
+//
+//        loadKoinModules(mockModule(onlyPm = false, spConfig = spConfFull, gdprPmId = "13111"))
+//
+//        scenario = launchActivity()
+//
+//        wr { tapRejectOnWebView() }
+//        wr { tapAcceptCcpaOnWebView() }
+//        wr { clickOnGdprReviewConsent() }
+//        wr(backup = { clickOnGdprReviewConsent() }) { tapRejectOnWebView() }
+//        wr { clickOnGdprReviewConsent() }
+//        wr { tapToEnableAllConsent() }
+//        wr { tapSaveAndExitWebView() }
+//        wr { clickOnGdprReviewConsent() }
+//        wr { checkAllConsentsOn() }
+//    }
 
 /*
     @Test
@@ -262,13 +283,21 @@ class ExampleAppV6Tests {
     }
     */
 
-    private fun mockModule(uuid: String?, url: String, onlyPm: Boolean = false): Module {
+    private fun mockModule(
+        spConfig: SpConfig,
+        gdprPmId: String,
+        uuid: String? = null,
+        url: String = "",
+        onlyPm: Boolean = false
+    ): Module {
         return module(override = true) {
             single<DataProvider> {
                 object : DataProvider {
                     override val authId = uuid
                     override val url = url
                     override val onlyPm: Boolean = onlyPm
+                    override val spConfig: SpConfig = spConfig
+                    override val gdprPmId: String = gdprPmId
                 }
             }
         }
