@@ -8,6 +8,8 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
 import org.json.JSONObject
+import okhttp3.RequestBody.Companion.toRequestBody
+import okhttp3.MediaType.Companion.toMediaType
 
 /**
  * Factory method used to create an instance of the [Logger] interface
@@ -53,11 +55,11 @@ private class LoggerImpl(
     val url: String
 ) : Logger {
     override fun error(e: RuntimeException) {
-        val mediaType = MediaType.parse("application/json")
-        val body: RequestBody = RequestBody.create(mediaType, errorMessageManager.build(e))
+        val mediaType = "application/json".toMediaType()
+        val body: RequestBody = errorMessageManager.build(e).toRequestBody(mediaType)
         val request: Request = Request.Builder().url(url).post(body)
-            .header("Accept", mediaType?.type() ?: "")
-            .header("Content-Type", mediaType?.type() ?: "")
+            .header("Accept", mediaType.type)
+            .header("Content-Type", mediaType.type)
             .build()
 
         networkClient.newCall(request).enqueue { }

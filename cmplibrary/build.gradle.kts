@@ -92,7 +92,7 @@ dependencies {
 
     // Unfortunately we depend on a outdated version of okhttp due to its support to older versions of Android
     //noinspection GradleDependency
-    api(Libs.okHttpCmp)
+    api(Libs.okHttpLatest)
 
     testImplementation(Libs.mockk)
     testImplementation(Libs.mockwebserver)

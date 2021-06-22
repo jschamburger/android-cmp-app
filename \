@@ -1,0 +1,65 @@
+fix import
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# Date:      Thu Jun 17 10:49:58 2021 +0200
+#
+# interactive rebase in progress; onto 6c41fc8c
+# Last commands done (2 commands done):
+#    pick 2c72d6d0 added log
+#    squash 25977d36 fix import
+# No commands remaining.
+# You are currently rebasing branch 'sp-7285-logging-view-meta' on '6c41fc8c'.
+#
+# Changes to be committed:
+#	modified:   cmplibrary/src/debug/java/com/sourcepoint/cmplibrary/exception/LoggerImpl.kt
+#	modified:   cmplibrary/src/localProd/java/com/sourcepoint/cmplibrary/exception/LoggerImpl.kt
+#	modified:   cmplibrary/src/main/java/com/sourcepoint/cmplibrary/SpConsentLibImpl.kt
+#	modified:   cmplibrary/src/main/java/com/sourcepoint/cmplibrary/consent/ConsentManagerUtils.kt
+#	modified:   cmplibrary/src/main/java/com/sourcepoint/cmplibrary/core/web/ConsentWebView.kt
+#	modified:   cmplibrary/src/main/java/com/sourcepoint/cmplibrary/creation/Builder.kt
+#	modified:   cmplibrary/src/main/java/com/sourcepoint/cmplibrary/creation/Factory.kt
+#	modified:   cmplibrary/src/main/java/com/sourcepoint/cmplibrary/creation/Factory4Java.kt
+#	modified:   cmplibrary/src/main/java/com/sourcepoint/cmplibrary/creation/SpConfigDataBuilder.kt
+#	modified:   cmplibrary/src/main/java/com/sourcepoint/cmplibrary/data/ServiceImpl.kt
+#	modified:   cmplibrary/src/main/java/com/sourcepoint/cmplibrary/data/network/NetworkClientImpl.kt
+#	modified:   cmplibrary/src/main/java/com/sourcepoint/cmplibrary/data/network/util/ResponseManagerImpl.kt
+#	modified:   cmplibrary/src/main/java/com/sourcepoint/cmplibrary/exception/ErrorMessageManager.kt
+#	modified:   cmplibrary/src/main/java/com/sourcepoint/cmplibrary/exception/Logger.kt
+#	new file:   cmplibrary/src/main/java/com/sourcepoint/cmplibrary/exception/LoggerUtil.kt
+#	modified:   cmplibrary/src/main/java/com/sourcepoint/cmplibrary/model/exposed/SpConfig.kt
+#	modified:   cmplibrary/src/preprod/java/com/sourcepoint/cmplibrary/exception/LoggerImpl.kt
+#	modified:   cmplibrary/src/release/java/com.sourcepoint.cmplibrary.exception/LoggerImpl.kt
+#	modified:   cmplibrary/src/test/java/com/sourcepoint/cmplibrary/data/network/ResponseManagerImplTest.kt
+#	modified:   samples/metaapp/src/main/java/com/sourcepointmeta/metaapp/data/localdatasource/LocalDataSource.kt
+#	modified:   samples/metaapp/src/main/java/com/sourcepointmeta/metaapp/data/localdatasource/Model.kt
+#	modified:   samples/metaapp/src/main/java/com/sourcepointmeta/metaapp/di/AppModule.kt
+#	new file:   samples/metaapp/src/main/java/com/sourcepointmeta/metaapp/logger/LoggerImpl.kt
+#	modified:   samples/metaapp/src/main/java/com/sourcepointmeta/metaapp/ui/AddUpdatePropertyFragment.kt
+#	modified:   samples/metaapp/src/main/java/com/sourcepointmeta/metaapp/ui/DemoActivity.kt
+#	modified:   samples/metaapp/src/main/java/com/sourcepointmeta/metaapp/ui/DemoFragment.kt
+#	new file:   samples/metaapp/src/main/java/com/sourcepointmeta/metaapp/ui/LogFragment.kt
+#	new file:   samples/metaapp/src/main/java/com/sourcepointmeta/metaapp/ui/LogViewModel.kt
+#	modified:   samples/metaapp/src/main/java/com/sourcepointmeta/metaapp/ui/PropertyListFragment.kt
+#	modified:   samples/metaapp/src/main/java/com/sourcepointmeta/metaapp/ui/PropertyUIModel+Ext.kt
+#	new file:   samples/metaapp/src/main/java/com/sourcepointmeta/metaapp/ui/component/DemoFragmentLayout.kt
+#	new file:   samples/metaapp/src/main/java/com/sourcepointmeta/metaapp/ui/component/LogAdapter.kt
+#	new file:   samples/metaapp/src/main/java/com/sourcepointmeta/metaapp/ui/component/LogItemView.kt
+#	modified:   samples/metaapp/src/main/java/com/sourcepointmeta/metaapp/ui/component/Models4View.kt
+#	modified:   samples/metaapp/src/main/java/com/sourcepointmeta/metaapp/ui/component/ViewExtensions.kt
+#	new file:   samples/metaapp/src/main/res/drawable/ic_baseline_arrow_back_24.xml
+#	modified:   samples/metaapp/src/main/res/layout/activity_demo.xml
+#	modified:   samples/metaapp/src/main/res/layout/demo_fragment_layout.xml
+#	new file:   samples/metaapp/src/main/res/layout/item_log.xml
+#	new file:   samples/metaapp/src/main/res/layout/log_fragment_layout.xml
+#	modified:   samples/metaapp/src/main/res/layout/main_activity.xml
+#	modified:   samples/metaapp/src/main/res/values-night/themes.xml
+#	modified:   samples/metaapp/src/main/res/values/attrs.xml
+#	modified:   samples/metaapp/src/main/res/values/colors.xml
+#	modified:   samples/metaapp/src/main/res/values/strings.xml
+#	modified:   samples/metaapp/src/main/res/values/themes.xml
+#	modified:   samples/metaapp/src/main/res/values/type.xml
+#	new file:   samples/metaapp/src/main/sqldelight/com.sourcepointmeta.metaapp.db/7.sqm
+#	new file:   samples/metaapp/src/main/sqldelight/com.sourcepointmeta.metaapp.db/Logger.sq
+#

@@ -10,8 +10,9 @@ import com.sourcepoint.cmplibrary.model.Ccpa
 import com.sourcepoint.cmplibrary.model.Gdpr
 import com.sourcepoint.cmplibrary.model.UnifiedMessageResp
 import com.sourcepoint.cmplibrary.util.check
-import okhttp3.HttpUrl
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import org.json.JSONObject
+import java.util.*
 
 internal fun String.toUnifiedMessageRespDto(): UnifiedMessageResp {
     return JSONObject(this).toUnifiedMessageRespDto()
@@ -41,19 +42,19 @@ internal fun JSONObject.toUnifiedMessageRespDto(): UnifiedMessageResp {
 }
 
 internal fun Map<String, Any?>.toCampaignResp(): CampaignResp? {
-    return when (getFieldValue<String>("type")?.toUpperCase() ?: failParam("type")) {
+    return when (getFieldValue<String>("type")?.uppercase(Locale.getDefault()) ?: failParam("type")) {
         CampaignType.GDPR.name -> this.toGDPR()
         CampaignType.CCPA.name -> this.toCCPA()
         else -> null
     }
 }
 
-internal fun String.toCCPA(): Ccpa? {
+internal fun String.toCCPA(): Ccpa {
     val map: Map<String, Any?> = JSONObject(this).toTreeMap()
     return map.toCCPA()
 }
 
-private fun Map<String, Any?>.toCCPA(): Ccpa? {
+private fun Map<String, Any?>.toCCPA(): Ccpa {
 
     val message = getMap("message")?.toJSONObj()
     val messageMetaData = getMap("messageMetaData")?.toJSONObj()
@@ -63,7 +64,7 @@ private fun Map<String, Any?>.toCCPA(): Ccpa? {
         thisContent = JSONObject(this),
         applies = getFieldValue<Boolean>("applies") ?: false,
         message = message,
-        url = url?.let { HttpUrl.parse(it) },
+        url = url?.toHttpUrlOrNull(),
         messageMetaData = messageMetaData,
         userConsent = getMap("userConsent")?.toCCPAUserConsent() ?: failParam("CCPAUserConsent")
     )
@@ -79,13 +80,13 @@ internal fun Map<String, Any?>.toGDPR(): Gdpr {
         thisContent = JSONObject(this),
         applies = getFieldValue<Boolean>("applies") ?: false,
         message = message,
-        url = url?.let { HttpUrl.parse(it) },
+        url = url?.toHttpUrlOrNull(),
         messageMetaData = messageMetaData,
         userConsent = getMap("userConsent")?.toGDPRUserConsent() ?: failParam("GDPRUserConsent")
     )
 }
 
-internal fun String.toGDPR(): Gdpr? {
+internal fun String.toGDPR(): Gdpr {
     val map: Map<String, Any?> = JSONObject(this).toTreeMap()
     return map.toGDPR()
 }

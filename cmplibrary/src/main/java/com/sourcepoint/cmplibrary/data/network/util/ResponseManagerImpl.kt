@@ -36,9 +36,9 @@ private class ResponseManagerImpl(
      * @return an [Either] object of a [MessageResp] type parameter
      */
     override fun parseResponse(r: Response): Either<UnifiedMessageResp> = check {
-        val body = r.body()?.byteStream()?.reader()?.readText() ?: fail("Body Response")
-        val status = r.code()
-        val mess = r.message()
+        val body = r.body?.byteStream()?.reader()?.readText() ?: fail("Body Response")
+        val status = r.code
+        val mess = r.message
         logger.res(
             tag = "UnifiedMessageResp",
             msg = mess,
@@ -56,7 +56,7 @@ private class ResponseManagerImpl(
     }
 
     override fun parseNativeMessRes(r: Response): Either<NativeMessageResp> = check {
-        val body = r.body()?.byteStream()?.reader()?.readText() ?: fail("Body Response")
+        val body = r.body?.byteStream()?.reader()?.readText() ?: fail("Body Response")
         if (r.isSuccessful) {
             when (val either: Either<NativeMessageResp> = jsonConverter.toNativeMessageResp(body)) {
                 is Either.Right -> either.r
@@ -68,7 +68,7 @@ private class ResponseManagerImpl(
     }
 
     override fun parseNativeMessResK(r: Response): Either<NativeMessageRespK> = check {
-        val body = r.body()?.byteStream()?.reader()?.readText() ?: fail("Body Response")
+        val body = r.body?.byteStream()?.reader()?.readText() ?: fail("Body Response")
         if (r.isSuccessful) {
             when (val either: Either<NativeMessageRespK> = jsonConverter.toNativeMessageRespK(body)) {
                 is Either.Right -> either.r
@@ -80,7 +80,7 @@ private class ResponseManagerImpl(
     }
 
     override fun parseConsentResEither(r: Response, campaignType: CampaignType): Either<ConsentResp> = check {
-        val body = r.body()?.byteStream()?.reader()?.readText() ?: fail("Body Response")
+        val body = r.body?.byteStream()?.reader()?.readText() ?: fail("Body Response")
         if (r.isSuccessful) {
             when (val either: Either<ConsentResp> = jsonConverter.toConsentResp(body, campaignType)) {
                 is Either.Right -> either.r
@@ -92,9 +92,9 @@ private class ResponseManagerImpl(
     }
 
     override fun parseConsentRes(r: Response, campaignType: CampaignType): ConsentResp {
-        val body = r.body()?.byteStream()?.reader()?.readText() ?: fail("Body Response")
-        val status = r.code()
-        val mess = r.message()
+        val body = r.body?.byteStream()?.reader()?.readText() ?: fail("Body Response")
+        val status = r.code
+        val mess = r.message
         logger.res(
             tag = "ConsentResp",
             msg = mess,
@@ -112,9 +112,9 @@ private class ResponseManagerImpl(
     }
 
     override fun parseCustomConsentRes(r: Response): CustomConsentResp {
-        val body = r.body()?.byteStream()?.reader()?.readText() ?: fail("Body Response")
-        val status = r.code()
-        val mess = r.message()
+        val body = r.body?.byteStream()?.reader()?.readText() ?: fail("Body Response")
+        val status = r.code
+        val mess = r.message
         logger.res(
             tag = "CustomConsentResp",
             msg = mess,

@@ -14,7 +14,9 @@ import com.sourcepoint.cmplibrary.model.UnifiedMessageResp
 import com.sourcepoint.cmplibrary.model.ext.toBodyRequest
 import com.sourcepoint.cmplibrary.util.check
 import com.sourcepoint.cmplibrary.util.toConsentLibException
+import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.* // ktlint-disable
+import okhttp3.MediaType.Companion.toMediaType
 import org.json.JSONObject
 
 internal fun createNetworkClient(
@@ -37,9 +39,9 @@ private class NetworkClientImpl(
         pError: (Throwable) -> Unit,
         env: Env
     ) {
-        val mediaType = MediaType.parse("application/json")
+        val mediaType = "application/json".toMediaType()
         val jsonBody = messageReq.toBodyRequest()
-        val body: RequestBody = RequestBody.create(mediaType, jsonBody)
+        val body: RequestBody = jsonBody.toRequestBody(mediaType)
         val url = urlManager.inAppMessageUrl(env)
 
         logger.req(
@@ -67,7 +69,6 @@ private class NetworkClientImpl(
                             pSuccess(it)
                         }
                         .executeOnLeft {
-                            val ex = it.toConsentLibException()
                             pError(it)
                         }
                 }
@@ -80,9 +81,9 @@ private class NetworkClientImpl(
         consentAction: ConsentAction
     ): Either<ConsentResp> = check {
 
-        val mediaType = MediaType.parse("application/json")
+        val mediaType = "application/json".toMediaType()
         val jsonBody = consentReq.toString()
-        val body: RequestBody = RequestBody.create(mediaType, jsonBody)
+        val body: RequestBody = jsonBody.toRequestBody(mediaType)
         val url = urlManager
             .sendConsentUrl(campaignType = consentAction.campaignType, env = env, actionType = consentAction.actionType)
 
@@ -107,9 +108,9 @@ private class NetworkClientImpl(
         customConsentReq: CustomConsentReq,
         env: Env
     ): Either<CustomConsentResp> = check {
-        val mediaType = MediaType.parse("application/json")
-        val jsonBody = customConsentReq.toBodyRequest()
-        val body: RequestBody = RequestBody.create(mediaType, customConsentReq.toBodyRequest())
+        val mediaType = "application/json".toMediaType()
+        val jsonBody = customConsentReq.toString()
+        val body: RequestBody = jsonBody.toRequestBody(mediaType)
         val url = urlManager.sendCustomConsentUrl(env)
 
         logger.req(
@@ -146,8 +147,8 @@ private class NetworkClientImpl(
               }
         """.trimIndent()
 
-        val mediaType = MediaType.parse("application/json")
-        val body: RequestBody = RequestBody.create(mediaType, bodyContent)
+        val mediaType = "application/json".toMediaType()
+        val body: RequestBody = bodyContent.toRequestBody(mediaType)
 
         val request: Request = Request.Builder()
 //            .url(urlManager.inAppUrlNativeMessage)
@@ -185,8 +186,8 @@ private class NetworkClientImpl(
               }
         """.trimIndent()
 
-        val mediaType = MediaType.parse("application/json")
-        val body: RequestBody = RequestBody.create(mediaType, bodyContent)
+        val mediaType = "application/json".toMediaType()
+        val body: RequestBody = bodyContent.toRequestBody(mediaType)
 
         val request: Request = Request.Builder()
 //            .url(urlManager.inAppUrlNativeMessage)

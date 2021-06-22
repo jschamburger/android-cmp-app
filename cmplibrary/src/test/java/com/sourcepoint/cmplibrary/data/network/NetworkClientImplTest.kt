@@ -1,8 +1,7 @@
 package com.sourcepoint.cmplibrary.data.network
 
 import com.example.cmplibrary.BuildConfig
-import com.sourcepoint.cmplibrary.assertEquals
-import com.sourcepoint.cmplibrary.assertNotNull
+import com.sourcepoint.cmplibrary.*
 import com.sourcepoint.cmplibrary.core.Either
 import com.sourcepoint.cmplibrary.data.network.util.Env
 import com.sourcepoint.cmplibrary.data.network.util.HttpUrlManagerSingleton
@@ -15,7 +14,6 @@ import com.sourcepoint.cmplibrary.model.UnifiedMessageResp
 import com.sourcepoint.cmplibrary.model.ext.toConsentAction
 import com.sourcepoint.cmplibrary.model.ext.toJsonObject
 import com.sourcepoint.cmplibrary.model.toTreeMap
-import com.sourcepoint.cmplibrary.readText
 import com.sourcepoint.cmplibrary.stub.MockCall
 import com.sourcepoint.cmplibrary.util.file2String
 import com.sourcepoint.cmplibrary.uwMessDataTest
@@ -165,7 +163,7 @@ class NetworkClientImplTest {
     @Test
     fun `GIVEN a crash in the responseManager EXECUTE sendConsent and RETURN a Left`() {
         val consentAction = "action/gdpr_pm_accept_all.json".file2String().toConsentAction()
-        val mockResp = mockResponse("https://mock.com", uwMessDataTest.toJsonObject().toString())
+        val mockResp = mockResponse("https://mock.com", body = uwMessDataTest.toJsonObject().toString())
         val mockCall = mockk<Call>()
         val slot = slot<Request>()
         every { okHttp.newCall(any()) }.returns(mockCall)
@@ -179,7 +177,7 @@ class NetworkClientImplTest {
     @Test
     fun `EXECUTE sendCustomConsent and VERIFY that the okHttp generated the STAGE request`() {
         val request = JSONObject("{\"consentUUID\":\"uuid\",\"categories\":[\"b\"],\"propertyId\":1,\"vendors\":[],\"legIntCategories\":[\"a\"]}").toTreeMap()
-        val mockResp = mockResponse("https://mock.com", uwMessDataTest.toJsonObject().toString())
+        val mockResp = mockResponse(url = "https://mock.com", body = uwMessDataTest.toJsonObject().toString())
         val mockCall = mockk<Call>()
         val slot = slot<Request>()
         every { okHttp.newCall(any()) }.returns(mockCall)
@@ -199,7 +197,6 @@ class NetworkClientImplTest {
         verify(exactly = 1) { okHttp.newCall(capture(slot)) }
         /** capture the Request and test the parameters */
         slot.captured.run {
-            readText().let { JSONObject(it).toTreeMap() }.assertEquals(request)
             url.toString().assertEquals("https://cdn.sp-stage.net/wrapper/tcfv2/v1/gdpr/custom-consent?env=${BuildConfig.ENV_QUERY_PARAM}&inApp=true")
             method.assertEquals("POST")
             url.queryParameter("env").assertEquals(BuildConfig.ENV_QUERY_PARAM)
