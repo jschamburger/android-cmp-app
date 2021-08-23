@@ -8,7 +8,9 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.sourcepoint.app.v6.core.DataProvider
 import com.sourcepoint.cmplibrary.UnitySpClient
+import com.sourcepoint.cmplibrary.creation.SpConfigDataBuilder
 import com.sourcepoint.cmplibrary.creation.delegate.spConsentLibLazy
+import com.sourcepoint.cmplibrary.data.network.util.CampaignsEnv
 import com.sourcepoint.cmplibrary.exception.CampaignType
 import com.sourcepoint.cmplibrary.model.PMTab
 import com.sourcepoint.cmplibrary.model.exposed.ActionType
@@ -28,16 +30,19 @@ class MainActivityKotlin : AppCompatActivity() {
     private val spConsentLib by spConsentLibLazy {
         activity = this@MainActivityKotlin
         spClient = LocalClient()
-        spConfig = dataProvider.spConfig
-//        config {
-//            accountId = 22
-//            propertyName = "mobile.multicampaign.demo"
-//            messLanguage = MessageLanguage.ENGLISH
-//            +(CampaignType.GDPR)
-//            +(CampaignType.CCPA to listOf(("location" to "US")))
-//        }
+        spConfig = SpConfigDataBuilder().addAccountId(229)
+                .addPropertyName("wsj.android.app")
+                .addMessageTimeout(4000)
+                .addCampaignsEnv(CampaignsEnv.PUBLIC)
+                .addCampaign(CampaignType.GDPR)
+                .build();
     }
 
+    private fun nextActivity() {
+        val i = Intent(this, NextActivity::class.java)
+        startActivity(i)
+        finish()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,9 +50,10 @@ class MainActivityKotlin : AppCompatActivity() {
             clearAllData(this)
         }
         setContentView(R.layout.activity_main)
+        findViewById<View>(R.id.nextActivityButton).setOnClickListener { _v: View? -> nextActivity() }
         findViewById<View>(R.id.review_consents_gdpr).setOnClickListener { _v: View? ->
             spConsentLib.loadPrivacyManager(
-                dataProvider.gdprPmId,
+                "509973",
                 PMTab.PURPOSES,
                 CampaignType.GDPR
             )
@@ -94,6 +100,7 @@ class MainActivityKotlin : AppCompatActivity() {
         }
 
         override fun onConsentReady(consent: SPConsents, fromPm: Boolean) {
+            Log.i(TAG, "onConsentReady: $consent FROM_PM? $fromPm")
         }
 
         override fun onConsentReady(consent: String) {

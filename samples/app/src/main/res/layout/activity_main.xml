@@ -70,4 +70,12 @@
         app:srcCompat="@drawable/source_point_logo"
         android:contentDescription="@string/source_point_logo" />
 
+    <Button
+        android:id="@+id/nextActivityButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Next_Act"
+        tools:layout_editor_absoluteX="139dp"
+        tools:layout_editor_absoluteY="63dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
